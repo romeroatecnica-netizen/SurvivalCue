@@ -1,0 +1,6 @@
+{
+  "name": "SurvivalCue — Interactive Emergency, Blackout, Natural Disaster & Survival Simulator",
+  "description": "Interactive multi-stage SVG simulator for blackouts, natural disasters, everyday emergencies, and wilderness survival with local progress tracking and 10 languages.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
