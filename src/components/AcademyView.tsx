@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {ArrowLeft, BookOpen, CheckCircle2} from 'lucide-react';
 import type {LangCode} from '../config/seo';
 import type {UiStrings} from '../i18n/ui';
 import type {CategoryId, IllustratedLesson, SceneHotspot} from '../types';
 import {tLoc} from '../types';
+import {shuffleSeeded} from '../utils/challengeLink';
 import {TacticalVisualStage} from './TacticalVisualStage';
 
 interface AcademyViewProps {
@@ -36,14 +37,22 @@ export const AcademyView: React.FC<AcademyViewProps> = ({
     setChosenQuizIdx(null);
   };
 
+  const shuffledQuiz = useMemo(() => {
+    if (!activeLesson) return [];
+    return shuffleSeeded(
+      activeLesson.microChallenge.options.map((opt, origIdx) => ({opt, origIdx})),
+      `${activeLesson.id}::quiz`
+    );
+  }, [activeLesson]);
+
   if (activeLesson) {
     const isMastered = completedLessons.includes(activeLesson.id);
     const quizAnsweredCorrect =
       chosenQuizIdx !== null && chosenQuizIdx === activeLesson.microChallenge.correctIndex;
 
-    const handleQuizSelect = (idx: number) => {
-      setChosenQuizIdx(idx);
-      if (idx === activeLesson.microChallenge.correctIndex) {
+    const handleQuizSelect = (origIdx: number) => {
+      setChosenQuizIdx(origIdx);
+      if (origIdx === activeLesson.microChallenge.correctIndex) {
         onMasterLesson(activeLesson.id);
       }
     };
@@ -124,9 +133,9 @@ export const AcademyView: React.FC<AcademyViewProps> = ({
               </p>
 
               <div className="space-y-2">
-                {activeLesson.microChallenge.options.map((opt, idx) => {
-                  const isChosen = chosenQuizIdx === idx;
-                  const isCorrect = idx === activeLesson.microChallenge.correctIndex;
+                {shuffledQuiz.map(({opt, origIdx}) => {
+                  const isChosen = chosenQuizIdx === origIdx;
+                  const isCorrect = origIdx === activeLesson.microChallenge.correctIndex;
                   let cls = 'border-slate-200 bg-white hover:border-blue-400';
                   if (chosenQuizIdx !== null) {
                     if (isCorrect) cls = 'border-emerald-600 bg-emerald-50';
@@ -134,9 +143,9 @@ export const AcademyView: React.FC<AcademyViewProps> = ({
                   }
                   return (
                     <button
-                      key={idx}
+                      key={origIdx}
                       type="button"
-                      onClick={() => handleQuizSelect(idx)}
+                      onClick={() => handleQuizSelect(origIdx)}
                       className={`w-full text-left border rounded-lg p-3 text-xs font-medium text-slate-800 transition-colors cursor-pointer ${cls}`}
                     >
                       {tLoc(opt, lang)}

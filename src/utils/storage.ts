@@ -189,6 +189,28 @@ export function recordChallengeCompletion(profile: UserProfile, challengeId: str
   };
 }
 
+export function recordArenaCompletion(
+  profile: UserProfile,
+  scorePct: number,
+  beatChallenger: boolean
+): {updated: UserProfile; xpGained: number} {
+  const touched = touchStreak(profile);
+  const xpGained = 55 + Math.round(scorePct * 0.8) + (beatChallenger ? 40 : 0);
+  const updated: UserProfile = {
+    ...touched,
+    xp: touched.xp + xpGained,
+    arenaRunsCompleted: (touched.arenaRunsCompleted ?? 0) + 1,
+    challengesWon: (touched.challengesWon ?? 0) + (beatChallenger ? 1 : 0),
+  };
+  return {
+    updated: {
+      ...updated,
+      unlockedBadges: evaluateBadges(updated),
+    },
+    xpGained,
+  };
+}
+
 export function resolveMistakeRecord(profile: UserProfile, mistakeId: string): UserProfile {
   const touched = touchStreak(profile);
   const nextMissed = {...touched.missedDecisions};
@@ -277,6 +299,14 @@ export function validateImportedStore(rawJson: string): ProgressStore | null {
           p.missedDecisions && typeof p.missedDecisions === 'object' ? p.missedDecisions : {},
         unlockedBadges: Array.isArray(p.unlockedBadges) ? p.unlockedBadges : [],
         preferredTimedMode: Boolean(p.preferredTimedMode),
+        arenaRunsCompleted:
+          typeof p.arenaRunsCompleted === 'number' && p.arenaRunsCompleted >= 0
+            ? Math.floor(p.arenaRunsCompleted)
+            : 0,
+        challengesWon:
+          typeof p.challengesWon === 'number' && p.challengesWon >= 0
+            ? Math.floor(p.challengesWon)
+            : 0,
       });
     }
     if (sanitizedProfiles.length === 0) return null;

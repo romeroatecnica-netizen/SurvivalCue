@@ -20,6 +20,7 @@ import type {
   VisualStatePatch,
 } from '../types';
 import {tLoc} from '../types';
+import {shuffleSeeded} from '../utils/challengeLink';
 import {TacticalVisualStage} from './TacticalVisualStage';
 
 interface MissionRunnerProps {
@@ -52,20 +53,50 @@ export const MissionRunner: React.FC<MissionRunnerProps> = ({
   const [finished, setFinished] = useState(false);
   const [timedMode, setTimedMode] = useState(initialTimedMode);
   const [secondsLeft, setSecondsLeft] = useState(45);
+  const [attemptNonce, setAttemptNonce] = useState(0);
 
   const stage = mission.stages[stageIndex];
 
+  const shuffledOptions = useMemo(() => {
+    return shuffleSeeded(stage.options, `${mission.id}::${stage.id}::${attemptNonce}::opts`);
+  }, [mission.id, stage.id, stage.options, attemptNonce]);
+
+  const shuffledHotspots = useMemo(() => {
+    const ordered: SceneHotspot[] = [];
+    for (const opt of shuffledOptions) {
+      const match = stage.hotspots.find((h) => h.id === opt.hotspotId);
+      if (match && !ordered.some((o) => o.id === match.id)) {
+        ordered.push(match);
+      }
+    }
+    for (const h of stage.hotspots) {
+      if (!ordered.some((o) => o.id === h.id)) {
+        ordered.push(h);
+      }
+    }
+    return ordered;
+  }, [stage.hotspots, shuffledOptions]);
+
   useEffect(() => {
     setSecondsLeft(45);
-  }, [stageIndex, mission.id]);
+  }, [stageIndex, mission.id, attemptNonce]);
 
   useEffect(() => {
     if (!timedMode || selectedOption || finished) return;
-    if (secondsLeft <= 0) return;
+    if (secondsLeft <= 0) {
+      const worstOpt =
+        [...shuffledOptions].sort((a, b) => a.scoreDelta - b.scoreDelta)[0] ??
+        shuffledOptions[0];
+      if (worstOpt) {
+        handleSelectOption(worstOpt);
+      }
+      return;
+    }
     const id = window.setInterval(() => {
       setSecondsLeft((s) => Math.max(0, s - 1));
     }, 1000);
     return () => window.clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timedMode, selectedOption, finished, secondsLeft]);
 
   const currentVisual: VisualStatePatch = useMemo(() => {
@@ -139,6 +170,7 @@ export const MissionRunner: React.FC<MissionRunnerProps> = ({
     setMissedList([]);
     setFinished(false);
     setSecondsLeft(45);
+    setAttemptNonce((n) => n + 1);
   };
 
   const handleTimedSwitch = () => {
@@ -287,9 +319,10 @@ export const MissionRunner: React.FC<MissionRunnerProps> = ({
             <TacticalVisualStage
               scene={mission.scene}
               visual={currentVisual}
-              hotspots={stage.hotspots}
+              hotspots={shuffledHotspots}
               lang={lang}
               ui={ui}
+              examMode={true}
               activeHotspotId={selectedOption?.hotspotId ?? null}
               correctHotspotId={
                 selectedOption
@@ -320,7 +353,7 @@ export const MissionRunner: React.FC<MissionRunnerProps> = ({
             </div>
 
             <div className="space-y-2.5">
-              {stage.options.map((opt, idx) => {
+              {shuffledOptions.map((opt, idx) => {
                 const isChosen = selectedOption?.id === opt.id;
                 const showFeedback = Boolean(selectedOption);
                 let styleClass =
@@ -351,9 +384,11 @@ export const MissionRunner: React.FC<MissionRunnerProps> = ({
                         <div className="text-sm font-semibold text-slate-900">
                           {tLoc(opt.label, lang)}
                         </div>
-                        <div className="text-xs text-slate-600 mt-0.5">
-                          {tLoc(opt.summary, lang)}
-                        </div>
+                        {showFeedback && (
+                          <div className="text-xs text-slate-600 mt-0.5">
+                            {tLoc(opt.summary, lang)}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </button>

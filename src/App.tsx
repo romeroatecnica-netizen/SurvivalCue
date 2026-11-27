@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import {AcademyView} from './components/AcademyView';
 import {GearShowcase, MediaNetAdSlot} from './components/AdAndGearSection';
+import {ChallengeArenaView} from './components/ChallengeArenaView';
 import {ClinicView} from './components/ClinicView';
 import {MissionRunner} from './components/MissionRunner';
 import {ProfileDashboard} from './components/ProfileDashboard';
@@ -30,17 +31,20 @@ import {UI_TRANSLATIONS} from './i18n/ui';
 import type {
   AppMode,
   CategoryId,
+  ChallengePayload,
   MissedDecisionRecord,
   MissionCompletionRecord,
   ProgressStore,
   UserProfile,
 } from './types';
 import {tLoc} from './types';
+import {detectIncomingChallenge} from './utils/challengeLink';
 import {
   computeMasteryStats,
   createDefaultProfile,
   getRankIndex,
   loadProgressStore,
+  recordArenaCompletion,
   recordChallengeCompletion,
   recordLessonCompletion,
   recordMissionCompletion,
@@ -50,8 +54,13 @@ import {
 } from './utils/storage';
 
 export function App() {
+  const [incomingChallenge, setIncomingChallenge] = useState<ChallengePayload | null>(() =>
+    detectIncomingChallenge()
+  );
   const [lang, setLang] = useState<LangCode>(() => detectInitialLanguage());
-  const [mode, setMode] = useState<AppMode>('missions');
+  const [mode, setMode] = useState<AppMode>(() =>
+    detectIncomingChallenge() ? 'challenge' : 'missions'
+  );
   const [categoryFilter, setCategoryFilter] = useState<CategoryId | 'all'>('all');
   const [activeMissionId, setActiveMissionId] = useState<string | null>(null);
   const [store, setStore] = useState<ProgressStore>(() => loadProgressStore());
@@ -152,6 +161,29 @@ export function App() {
     updateActiveProfile((prof) => recordChallengeCompletion(prof, challengeId));
   };
 
+  const handleArenaComplete = (scorePct: number, beatChallenger: boolean): number => {
+    let gained = 55 + Math.round(scorePct * 0.8) + (beatChallenger ? 40 : 0);
+    updateActiveProfile((prof) => {
+      const res = recordArenaCompletion(prof, scorePct, beatChallenger);
+      gained = res.xpGained;
+      return res.updated;
+    });
+    return gained;
+  };
+
+  const handleClearIncomingChallenge = () => {
+    setIncomingChallenge(null);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('c');
+      url.searchParams.delete('challenge');
+      url.searchParams.delete('reto');
+      window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+    } catch {
+      // Ignore history edge errors
+    }
+  };
+
   const handleResolveMistake = (mistakeId: string) => {
     updateActiveProfile((prof) => resolveMistakeRecord(prof, mistakeId));
   };
@@ -217,6 +249,7 @@ export function App() {
     {id: 'missions', label: ui.nav.missions},
     {id: 'academy', label: ui.nav.academy},
     {id: 'visual_drill', label: ui.nav.visualDrill},
+    {id: 'challenge', label: ui.nav.challenge},
     {id: 'clinic', label: ui.nav.clinic},
     {id: 'profile', label: ui.nav.profile},
   ];
@@ -521,6 +554,17 @@ export function App() {
               lang={lang}
               ui={ui}
               onSolveChallenge={handleChallengeSolved}
+            />
+          )}
+
+          {mode === 'challenge' && (
+            <ChallengeArenaView
+              incomingChallenge={incomingChallenge}
+              onClearIncomingChallenge={handleClearIncomingChallenge}
+              playerName={activeProfile.name}
+              lang={lang}
+              ui={ui}
+              onCompleteArena={handleArenaComplete}
             />
           )}
 

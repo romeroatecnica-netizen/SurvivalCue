@@ -9,6 +9,7 @@ export interface UiStrings {
     missions: string;
     academy: string;
     visualDrill: string;
+    challenge: string;
     clinic: string;
     profile: string;
   };
@@ -110,6 +111,40 @@ export interface UiStrings {
     disclaimerBody: string;
     canonicalNotice: string;
   };
+  challenge: {
+    title: string;
+    subtitle: string;
+    incomingBannerTitle: string;
+    challengerLabel: string;
+    targetScoreLabel: string;
+    targetTimeLabel: string;
+    seedLabel: string;
+    trialCountLabel: string;
+    paceLabel: string;
+    paceHard: string;
+    paceStandard: string;
+    rotateSeedBtn: string;
+    acceptChallengeBtn: string;
+    startSoloBtn: string;
+    copyLinkBtn: string;
+    copiedFeedback: string;
+    shareNativeBtn: string;
+    sharePromptLabel: string;
+    trialLabel: string;
+    timeoutNotice: string;
+    nextTrialBtn: string;
+    finishGauntletBtn: string;
+    duelVictory: string;
+    duelTie: string;
+    duelDefeat: string;
+    yourScore: string;
+    yourTime: string;
+    xpEarned: string;
+    rematchBtn: string;
+    rematchNote: string;
+    dismissIncomingBtn: string;
+    previewListLabel: string;
+  };
   adLabel: string;
 }
 
@@ -122,6 +157,7 @@ const EN_UI: UiStrings = {
     missions: 'Missions',
     academy: 'Academy',
     visualDrill: 'Visual Drill',
+    challenge: 'Challenge',
     clinic: 'Clinic',
     profile: 'Progress',
   },
@@ -298,6 +334,41 @@ const EN_UI: UiStrings = {
       'SurvivalCue is an educational simulation tool designed to reinforce civil protection awareness and general preparedness concepts. It does not replace certified medical, firefighting, or official emergency management training. In a real emergency, call your local emergency number (112, 911, or regional dispatch) and obey civil defense authorities.',
     canonicalNotice: 'Canonical Edition · 100% Client-Side Static Simulator',
   },
+  challenge: {
+    title: 'Head-to-Head Link Challenge Arena',
+    subtitle:
+      'Play a timed gauntlet of rotating tactical dilemmas and SVG map spotters, then send a unique challenge link so friends face the exact same trials and try to beat your score.',
+    incomingBannerTitle: 'Incoming Challenge Received',
+    challengerLabel: 'Challenger',
+    targetScoreLabel: 'Score to Beat',
+    targetTimeLabel: 'Time to Beat',
+    seedLabel: 'Challenge Seed',
+    trialCountLabel: 'Trials',
+    paceLabel: 'Per-Trial Timer',
+    paceHard: '25s Hard',
+    paceStandard: '35s Standard',
+    rotateSeedBtn: 'New Changing Trials',
+    acceptChallengeBtn: 'Accept & Start Challenge',
+    startSoloBtn: 'Play & Set Benchmark Score',
+    copyLinkBtn: 'Copy Challenge Link',
+    copiedFeedback: 'Link copied!',
+    shareNativeBtn: 'Share',
+    sharePromptLabel: 'Direct Share Link (same seed & shuffled options)',
+    trialLabel: 'Trial',
+    timeoutNotice: 'Time expired — 0 pts recorded for this trial.',
+    nextTrialBtn: 'Next Trial',
+    finishGauntletBtn: 'Finish & Generate Share Link',
+    duelVictory: 'Victory — You beat the challenger!',
+    duelTie: 'Exact Tie — Identical score and pace!',
+    duelDefeat: 'Challenger holds the lead — Send a fresh rematch!',
+    yourScore: 'Your Score',
+    yourTime: 'Elapsed Time',
+    xpEarned: 'XP Earned',
+    rematchBtn: 'New Rotating Rematch Link',
+    rematchNote: 'Generates a fresh seed with different scenarios & visual tests.',
+    dismissIncomingBtn: 'Create Custom Challenge Instead',
+    previewListLabel: 'Seeded Trial Preview',
+  },
   adLabel: 'Sponsored Placement',
 };
 
@@ -310,6 +381,7 @@ const ES_UI: UiStrings = {
     missions: 'Misiones',
     academy: 'Academia',
     visualDrill: 'Reto Visual',
+    challenge: 'Retos',
     clinic: 'Clínica',
     profile: 'Progreso',
   },
@@ -449,7 +521,7 @@ const ES_UI: UiStrings = {
   },
   editorial: {
     title: 'Por qué la simulación visual entrena la respuesta real ante emergencias',
-    lead: 'Durante un apagón generalizado, una DANA o un sismo, el estrés agudo reduce la memoria de trabajo en segundos. Asociar decisiones críticas con referencias espaciales claras —cuadro eléctrico, llave de gas, cotas de inundación, dirección del viento y capas de abrigo— consolida reflejos seguros sin depender de memorización abstracta.',
+    lead: 'Durante un apagón generalizado, una inundación súbita o un sismo, el estrés agudo reduce la memoria de trabajo en segundos. Asociar decisiones críticas con referencias espaciales claras —cuadro eléctrico, llave de gas, cotas de inundación, dirección del viento y capas de abrigo— consolida reflejos seguros sin depender de memorización abstracta.',
     pillars: [
       {
         title: 'Continuidad ante Apagones de 72 Horas',
@@ -486,6 +558,41 @@ const ES_UI: UiStrings = {
       'SurvivalCue es una herramienta educativa de simulación y autoprotección. No sustituye la formación oficial de protección civil, bomberos ni atención médica profesional. Ante una emergencia real, llama de inmediato a los servicios de emergencia (112, 911 o equivalente local) y sigue las indicaciones de las autoridades.',
     canonicalNotice: 'Edición Canónica · Simulador Estático 100 % Local',
   },
+  challenge: {
+    title: 'Arena de Retos por Enlace',
+    subtitle:
+      'Supera una serie contrarreloj de dilemas tácticos avanzados y pruebas visuales sobre croquis SVG, y envía un enlace único para retar a alguien con las mismas pruebas.',
+    incomingBannerTitle: 'Has Recibido un Reto Directo',
+    challengerLabel: 'Retador',
+    targetScoreLabel: 'Puntuación a Batir',
+    targetTimeLabel: 'Tiempo a Batir',
+    seedLabel: 'Semilla del Reto',
+    trialCountLabel: 'Pruebas',
+    paceLabel: 'Tiempo por Prueba',
+    paceHard: '25s Difícil',
+    paceStandard: '35s Estándar',
+    rotateSeedBtn: 'Cambiar Pruebas (Nuevo Reto)',
+    acceptChallengeBtn: 'Aceptar y Empezar Reto',
+    startSoloBtn: 'Jugar y Fijar Marca',
+    copyLinkBtn: 'Copiar Enlace de Reto',
+    copiedFeedback: '¡Enlace copiado!',
+    shareNativeBtn: 'Compartir',
+    sharePromptLabel: 'Enlace Directo para Retar (mismas pruebas y orden)',
+    trialLabel: 'Prueba',
+    timeoutNotice: 'Tiempo agotado — 0 pts en esta prueba.',
+    nextTrialBtn: 'Siguiente Prueba',
+    finishGauntletBtn: 'Finalizar y Crear Enlace',
+    duelVictory: '¡Victoria! Has superado la marca del retador.',
+    duelTie: '¡Empate exacto en puntuación y tiempo!',
+    duelDefeat: 'El retador conserva la ventaja — ¡envía una revancha nueva!',
+    yourScore: 'Tu Puntuación',
+    yourTime: 'Tiempo Total',
+    xpEarned: 'XP Ganado',
+    rematchBtn: 'Nueva Revancha (Pruebas Distintas)',
+    rematchNote: 'Genera una nueva semilla con pruebas rotadas para el siguiente duelo.',
+    dismissIncomingBtn: 'Configurar otro reto propio',
+    previewListLabel: 'Pruebas asignadas a esta semilla',
+  },
   adLabel: 'Espacio Publicitario',
 };
 
@@ -506,6 +613,7 @@ function makeLocalizedUi(
     gear: {...EN_UI.gear, ...(overrides.gear ?? {})},
     editorial: {...EN_UI.editorial, ...(overrides.editorial ?? {})},
     footer: {...EN_UI.footer, ...(overrides.footer ?? {})},
+    challenge: {...EN_UI.challenge, ...(overrides.challenge ?? {})},
   };
 }
 
@@ -520,6 +628,7 @@ export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
       missions: 'Missions',
       academy: 'Académie',
       visualDrill: 'Défi Visuel',
+      challenge: 'Duels',
       clinic: 'Clinique',
       profile: 'Progrès',
     },
@@ -597,6 +706,7 @@ export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
       missions: 'Missionen',
       academy: 'Akademie',
       visualDrill: 'Karten-Drill',
+      challenge: 'Duell',
       clinic: 'Fehlerklinik',
       profile: 'Fortschritt',
     },
@@ -674,6 +784,7 @@ export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
       missions: 'Missões',
       academy: 'Academia',
       visualDrill: 'Desafio Visual',
+      challenge: 'Desafios',
       clinic: 'Clínica',
       profile: 'Progresso',
     },
@@ -745,6 +856,7 @@ export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
       missions: 'Миссии',
       academy: 'Академия',
       visualDrill: 'Карта-тест',
+      challenge: 'Дуэль',
       clinic: 'Разбор ошибок',
       profile: 'Прогресс',
     },
@@ -808,6 +920,7 @@ export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
       missions: 'मिशन',
       academy: 'अकादमी',
       visualDrill: 'दृश्य अभ्यास',
+      challenge: 'चुनौती',
       clinic: 'त्रुटि सुधार',
       profile: 'प्रगति',
     },
@@ -863,6 +976,7 @@ export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
       missions: 'المهام',
       academy: 'الأكاديمية',
       visualDrill: 'تدريب بصري',
+      challenge: 'تحدي',
       clinic: 'تحليل الأخطاء',
       profile: 'التقدم',
     },
@@ -933,6 +1047,7 @@ export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
       missions: '任务演练',
       academy: '图解学院',
       visualDrill: '视觉识图',
+      challenge: '链接挑战',
       clinic: '错题诊所',
       profile: '本地档案',
     },
@@ -997,6 +1112,7 @@ export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
       missions: 'ミッション',
       academy: '図解アカデミー',
       visualDrill: '視覚ドリル',
+      challenge: '対戦リンク',
       clinic: '弱点対策',
       profile: '進捗管理',
     },

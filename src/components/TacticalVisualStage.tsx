@@ -32,6 +32,7 @@ interface TacticalVisualStageProps {
   wrongHotspotId?: string | null;
   onHotspotSelect?: (hotspot: SceneHotspot) => void;
   disabled?: boolean;
+  examMode?: boolean;
 }
 
 export const TacticalVisualStage: React.FC<TacticalVisualStageProps> = ({
@@ -45,6 +46,7 @@ export const TacticalVisualStage: React.FC<TacticalVisualStageProps> = ({
   wrongHotspotId,
   onHotspotSelect,
   disabled = false,
+  examMode = false,
 }) => {
   const [layers, setLayers] = useState<LayerVisibility>({
     hazards: true,
@@ -56,6 +58,17 @@ export const TacticalVisualStage: React.FC<TacticalVisualStageProps> = ({
   const [zoomed, setZoomed] = useState<boolean>(false);
   const [hoveredSpot, setHoveredSpot] = useState<SceneHotspot | null>(null);
 
+  const isRevealed = !examMode || Boolean(correctHotspotId || wrongHotspotId);
+
+  const effectiveLayers: LayerVisibility = isRevealed
+    ? layers
+    : {
+        hazards: false,
+        routes: false,
+        gridCompass: layers.gridCompass,
+        labels: false,
+      };
+
   const toggleLayer = (key: keyof LayerVisibility) => {
     setLayers((prev) => ({...prev, [key]: !prev[key]}));
   };
@@ -63,38 +76,46 @@ export const TacticalVisualStage: React.FC<TacticalVisualStageProps> = ({
   const activeSpotObj = hotspots.find((h) => h.id === activeHotspotId) ?? null;
   const beamTarget =
     visual.flashlightTarget ??
-    (hoveredSpot ? {x: hoveredSpot.x, y: hoveredSpot.y} : activeSpotObj ? {x: activeSpotObj.x, y: activeSpotObj.y} : {x: 400, y: 230});
+    (hoveredSpot
+      ? {x: hoveredSpot.x, y: hoveredSpot.y}
+      : activeSpotObj
+      ? {x: activeSpotObj.x, y: activeSpotObj.y}
+      : {x: 400, y: 230});
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
       {/* Stage Layer & Inspection Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-50 border-b border-slate-200">
         <div className="flex flex-wrap items-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => toggleLayer('hazards')}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              layers.hazards
-                ? 'bg-red-50 text-red-700 border-red-200'
-                : 'bg-white text-slate-600 border-slate-200 hover:text-slate-900'
-            }`}
-          >
-            <AlertTriangle className="w-3.5 h-3.5" />
-            <span>{ui.layers.hazards}</span>
-          </button>
+          {isRevealed && (
+            <>
+              <button
+                type="button"
+                onClick={() => toggleLayer('hazards')}
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  layers.hazards
+                    ? 'bg-red-50 text-red-700 border-red-200'
+                    : 'bg-white text-slate-600 border-slate-200 hover:text-slate-900'
+                }`}
+              >
+                <AlertTriangle className="w-3.5 h-3.5" />
+                <span>{ui.layers.hazards}</span>
+              </button>
 
-          <button
-            type="button"
-            onClick={() => toggleLayer('routes')}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              layers.routes
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                : 'bg-white text-slate-600 border-slate-200 hover:text-slate-900'
-            }`}
-          >
-            <Route className="w-3.5 h-3.5" />
-            <span>{ui.layers.routes}</span>
-          </button>
+              <button
+                type="button"
+                onClick={() => toggleLayer('routes')}
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  layers.routes
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                    : 'bg-white text-slate-600 border-slate-200 hover:text-slate-900'
+                }`}
+              >
+                <Route className="w-3.5 h-3.5" />
+                <span>{ui.layers.routes}</span>
+              </button>
+            </>
+          )}
 
           <button
             type="button"
@@ -186,11 +207,11 @@ export const TacticalVisualStage: React.FC<TacticalVisualStageProps> = ({
             {/* Main Domain SVG Scene */}
             <SceneArtworks
               scene={scene}
-              visual={visual}
-              layers={layers}
+              visual={isRevealed ? visual : {...visual, safeRouteId: undefined, hazardZoneId: undefined, activeZoneId: undefined}}
+              layers={effectiveLayers}
               nightMode={nightMode}
               lang={lang}
-              activeHotspotId={activeHotspotId}
+              activeHotspotId={isRevealed ? activeHotspotId : null}
             />
 
             {/* Blackout Flashlight Spotlight Effect */}
@@ -236,12 +257,14 @@ export const TacticalVisualStage: React.FC<TacticalVisualStageProps> = ({
 
               let ringColor = '#1D4ED8';
               let fillColor = '#EFF6FF';
-              if (spot.role === 'hazard') {
-                ringColor = '#DC2626';
-                fillColor = '#FEF2F2';
-              } else if (spot.role === 'safe') {
-                ringColor = '#047857';
-                fillColor = '#ECFDF5';
+              if (isRevealed) {
+                if (spot.role === 'hazard') {
+                  ringColor = '#DC2626';
+                  fillColor = '#FEF2F2';
+                } else if (spot.role === 'safe') {
+                  ringColor = '#047857';
+                  fillColor = '#ECFDF5';
+                }
               }
               if (isCorrect) {
                 ringColor = '#047857';
@@ -347,7 +370,9 @@ export const TacticalVisualStage: React.FC<TacticalVisualStageProps> = ({
         <div className="flex items-center gap-2">
           <Layers className="w-3.5 h-3.5 text-emerald-700" />
           <span className="font-medium text-slate-800">
-            {visual.statusTag ? tLoc(visual.statusTag, lang) : ui.controls.clickSketchHint}
+            {isRevealed && visual.statusTag
+              ? tLoc(visual.statusTag, lang)
+              : ui.controls.clickSketchHint}
           </span>
         </div>
         <div className="flex items-center gap-1.5 text-slate-500">

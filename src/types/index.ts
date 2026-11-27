@@ -2,7 +2,13 @@ import type {LangCode} from '../config/seo';
 
 export type CategoryId = 'blackout' | 'disaster' | 'urban' | 'wilderness';
 
-export type AppMode = 'missions' | 'academy' | 'visual_drill' | 'clinic' | 'profile';
+export type AppMode =
+  | 'missions'
+  | 'academy'
+  | 'visual_drill'
+  | 'challenge'
+  | 'clinic'
+  | 'profile';
 
 export type SceneTemplateId =
   | 'home-blackout-cutaway'
@@ -159,6 +165,64 @@ export interface BadgeDefinition {
   description: LocText;
 }
 
+export interface ChallengePayload {
+  v: 1;
+  seed: string;
+  challengerName: string;
+  challengerScore?: number;
+  challengerTimeSec?: number;
+  category: CategoryId | 'all';
+  count: number;
+  timerSec: number;
+}
+
+export interface ChallengeDecisionOption {
+  id: string;
+  hotspotId?: string;
+  label: LocText;
+  isOptimal: boolean;
+  rationale: LocText;
+  visualEffect: VisualStatePatch;
+}
+
+export interface HardDecisionTrial {
+  id: string;
+  category: CategoryId;
+  scene: SceneTemplateId;
+  title: LocText;
+  situation: LocText;
+  prompt: LocText;
+  initialVisual: VisualStatePatch;
+  hotspots: SceneHotspot[];
+  options: ChallengeDecisionOption[];
+}
+
+export type ChallengeTrial =
+  | {
+      kind: 'decision';
+      id: string;
+      category: CategoryId;
+      scene: SceneTemplateId;
+      title: LocText;
+      situation: LocText;
+      prompt: LocText;
+      initialVisual: VisualStatePatch;
+      hotspots: SceneHotspot[];
+      options: ChallengeDecisionOption[];
+    }
+  | {
+      kind: 'visual';
+      id: string;
+      category: CategoryId;
+      scene: SceneTemplateId;
+      title: LocText;
+      prompt: LocText;
+      initialVisual: VisualStatePatch;
+      hotspots: SceneHotspot[];
+      correctHotspotId: string;
+      explanation: LocText;
+    };
+
 export interface UserProfile {
   id: string;
   name: string;
@@ -172,6 +236,8 @@ export interface UserProfile {
   missedDecisions: Record<string, MissedDecisionRecord>;
   unlockedBadges: string[];
   preferredTimedMode: boolean;
+  arenaRunsCompleted?: number;
+  challengesWon?: number;
 }
 
 export interface ProgressStore {

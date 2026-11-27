@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {ArrowRight, CheckCircle2, Crosshair, RotateCcw, XCircle} from 'lucide-react';
 import type {LangCode} from '../config/seo';
 import type {UiStrings} from '../i18n/ui';
 import type {SceneHotspot, SketchChallenge} from '../types';
 import {tLoc} from '../types';
+import {shuffleSeeded} from '../utils/challengeLink';
 import {TacticalVisualStage} from './TacticalVisualStage';
 
 interface VisualDrillViewProps {
@@ -23,10 +24,15 @@ export const VisualDrillView: React.FC<VisualDrillViewProps> = ({
 }) => {
   const [index, setIndex] = useState(0);
   const [selectedSpotId, setSelectedSpotId] = useState<string | null>(null);
+  const [retryNonce, setRetryNonce] = useState(0);
 
   const challenge = challenges[index];
   const isSolved = selectedSpotId !== null;
   const isCorrect = selectedSpotId === challenge.correctHotspotId;
+
+  const shuffledHotspots = useMemo(() => {
+    return shuffleSeeded(challenge.hotspots, `${challenge.id}::${retryNonce}`);
+  }, [challenge.id, challenge.hotspots, retryNonce]);
 
   const handleSelectHotspot = (spot: SceneHotspot) => {
     if (selectedSpotId !== null) return;
@@ -99,9 +105,10 @@ export const VisualDrillView: React.FC<VisualDrillViewProps> = ({
               hazardZoneId:
                 isSolved && !isCorrect && selectedSpotId ? selectedSpotId : undefined,
             }}
-            hotspots={challenge.hotspots}
+            hotspots={shuffledHotspots}
             lang={lang}
             ui={ui}
+            examMode={true}
             activeHotspotId={selectedSpotId}
             correctHotspotId={isSolved ? challenge.correctHotspotId : null}
             wrongHotspotId={isSolved && !isCorrect ? selectedSpotId : null}
@@ -116,7 +123,7 @@ export const VisualDrillView: React.FC<VisualDrillViewProps> = ({
           </p>
 
           <div className="space-y-2">
-            {challenge.hotspots.map((spot, idx) => {
+            {shuffledHotspots.map((spot, idx) => {
               const isChosen = selectedSpotId === spot.id;
               const isAnswer = spot.id === challenge.correctHotspotId;
               let cls = 'border-slate-200 bg-white hover:border-blue-400';
@@ -171,7 +178,10 @@ export const VisualDrillView: React.FC<VisualDrillViewProps> = ({
                 {!isCorrect && (
                   <button
                     type="button"
-                    onClick={() => setSelectedSpotId(null)}
+                    onClick={() => {
+                      setSelectedSpotId(null);
+                      setRetryNonce((n) => n + 1);
+                    }}
                     className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
