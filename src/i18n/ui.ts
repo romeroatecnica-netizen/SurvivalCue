@@ -1,3 +1,4 @@
+import {buildAmazonEsAffiliateUrl, getAmazonAffiliateDisclosure} from '../config/affiliate';
 import type {LangCode} from '../config/seo';
 import type {BadgeDefinition, CategoryId} from '../types';
 
@@ -242,8 +243,8 @@ const EN_UI: UiStrings = {
   gear: {
     sectionTitle: '72-Hour Readiness Kit Reference',
     sectionSubtitle: 'Contextual baseline equipment aligned with civil protection checklists.',
-    disclosure: 'Sponsored / affiliate reference links open safely in a new tab.',
-    ctaLabel: 'Inspect Spec',
+    disclosure: getAmazonAffiliateDisclosure('en'),
+    ctaLabel: 'Inspect on Amazon.es',
     items: [
       {
         id: 'gear-radio',
@@ -251,7 +252,7 @@ const EN_UI: UiStrings = {
         title: 'NOAA / FM Hand-Crank & Solar Emergency Radio',
         spec: 'Dynamo + 2000mAh USB powerbank + SOS beacon',
         reason: 'Maintains civil defense bulletins when cellular towers lose backup power.',
-        url: 'https://www.amazon.com/s?k=emergency+hand+crank+solar+weather+radio',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=radio+emergencia+manivela+solar'),
       },
       {
         id: 'gear-headlamp',
@@ -259,7 +260,7 @@ const EN_UI: UiStrings = {
         title: 'IPX6 Dual-Beam LED Headlamp (Red Night Mode)',
         spec: '350 lm + 18650/AAA dual-fuel + red low-signature beam',
         reason: 'Keeps both hands free for circuit breakers, stairs, and first aid in total darkness.',
-        url: 'https://www.amazon.com/s?k=waterproof+led+headlamp+red+light+mode',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=linterna+frontal+led+luz+roja'),
       },
       {
         id: 'gear-filter',
@@ -267,7 +268,7 @@ const EN_UI: UiStrings = {
         title: '0.1-Micron Hollow-Fiber Water Filter System',
         spec: 'Gravity/squeeze capable · 99.9999% bacteria & protozoa removal',
         reason: 'Produces safe drinking water from turbid sources when boiling fuel is scarce.',
-        url: 'https://www.amazon.com/s?k=hollow+fiber+water+filter+emergency',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=filtro+agua+supervivencia+fibra+hueca'),
       },
       {
         id: 'gear-ifak',
@@ -275,7 +276,7 @@ const EN_UI: UiStrings = {
         title: 'Compact Trauma & First Aid Kit (IFAK)',
         spec: 'CAT-style tourniquet, compression bandage, shears, nitrile gloves',
         reason: 'Controls severe hemorrhage and lacerations during seismic debris or road collisions.',
-        url: 'https://www.amazon.com/s?k=trauma+first+aid+kit+ifak+tourniquet',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=botiquin+emergencias+ifak+torniquete'),
       },
       {
         id: 'gear-power',
@@ -283,7 +284,7 @@ const EN_UI: UiStrings = {
         title: 'LiFePO4 Portable Power Station (300–500Wh)',
         spec: 'Pure sine-wave AC + USB-C PD + solar MPPT input',
         reason: 'Powers CPAP/medical devices, comms, and freezer cycles safely indoors without CO risk.',
-        url: 'https://www.amazon.com/s?k=lifepo4+portable+power+station+solar',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=estacion+energia+portatil+lifepo4'),
       },
       {
         id: 'gear-manual',
@@ -291,7 +292,7 @@ const EN_UI: UiStrings = {
         title: 'Waterproof Pocket Civil Protection & Knot Field Guide',
         spec: 'Tear-resistant synthetic pages · zero battery dependency',
         reason: 'Preserves triage, water dosing, and rigging diagrams when screens fail.',
-        url: 'https://www.amazon.com/s?k=waterproof+survival+pocket+field+guide',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=manual+supervivencia+impermeable'),
       },
     ],
   },
@@ -466,8 +467,8 @@ const ES_UI: UiStrings = {
   gear: {
     sectionTitle: 'Equipamiento de Referencia para Kit 72h',
     sectionSubtitle: 'Material básico alineado con guías de protección civil para apagones y evacuación.',
-    disclosure: 'Enlaces patrocinados / afiliación en pestaña nueva con rel="sponsored nofollow noopener".',
-    ctaLabel: 'Ver Especificación',
+    disclosure: getAmazonAffiliateDisclosure('es'),
+    ctaLabel: 'Ver en Amazon.es',
     items: [
       {
         id: 'gear-radio',
@@ -475,7 +476,7 @@ const ES_UI: UiStrings = {
         title: 'Radio de Emergencia Manivela + Panel Solar',
         spec: 'Dinamo + batería USB 2000mAh + alerta FM/AM + baliza SOS',
         reason: 'Mantiene recepción de avisos oficiales cuando caen las antenas de telefonía.',
-        url: 'https://www.amazon.es/s?k=radio+emergencia+manivela+solar',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=radio+emergencia+manivela+solar'),
       },
       {
         id: 'gear-headlamp',
@@ -483,7 +484,7 @@ const ES_UI: UiStrings = {
         title: 'Linterna Frontal LED IPX6 con Luz Roja Nocturna',
         spec: '350 lm + doble alimentación + haz rojo de bajo consumo',
         reason: 'Deja las manos libres para manipular cuadros eléctricos, escaleras y botiquín.',
-        url: 'https://www.amazon.es/s?k=linterna+frontal+led+luz+roja',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=linterna+frontal+led+luz+roja'),
       },
       {
         id: 'gear-filter',
@@ -491,7 +492,7 @@ const ES_UI: UiStrings = {
         title: 'Filtro de Agua de Fibra Hueca 0,1 Micras',
         spec: 'Filtración mecánica sin químicos · elimina 99,9999 % bacterias y protozoos',
         reason: 'Permite potabilizar agua turbia cuando no hay combustible para hervir.',
-        url: 'https://www.amazon.es/s?k=filtro+agua+supervivencia+fibra+hueca',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=filtro+agua+supervivencia+fibra+hueca'),
       },
       {
         id: 'gear-ifak',
@@ -499,7 +500,7 @@ const ES_UI: UiStrings = {
         title: 'Botiquín Táctico y Control de Hemorragias (IFAK)',
         spec: 'Torniquete homologado, vendaje compresivo, tijeras y guantes de nitrilo',
         reason: 'Respuesta inmediata ante cortes profundos por cristales, sismos o accidentes viales.',
-        url: 'https://www.amazon.es/s?k=botiquin+emergencias+ifak+torniquete',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=botiquin+emergencias+ifak+torniquete'),
       },
       {
         id: 'gear-power',
@@ -507,7 +508,7 @@ const ES_UI: UiStrings = {
         title: 'Estación de Energía Portátil LiFePO4 (300–500Wh)',
         spec: 'Onda sinusoidal pura + USB-C PD + carga solar MPPT',
         reason: 'Alimenta equipos médicos, comunicaciones y pequeños consumos en interior sin riesgo de CO.',
-        url: 'https://www.amazon.es/s?k=estacion+energia+portatil+lifepo4',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=estacion+energia+portatil+lifepo4'),
       },
       {
         id: 'gear-manual',
@@ -515,7 +516,7 @@ const ES_UI: UiStrings = {
         title: 'Manual de Bolsillo Impermeable de Supervivencia y Nudos',
         spec: 'Páginas sintéticas resistentes al agua · cero dependencia de batería',
         reason: 'Conserva protocolos de triaje, dosificación de agua y nudos críticos sin pantalla.',
-        url: 'https://www.amazon.es/s?k=manual+supervivencia+impermeable',
+        url: buildAmazonEsAffiliateUrl('https://www.amazon.es/s?k=manual+supervivencia+impermeable'),
       },
     ],
   },
@@ -617,7 +618,7 @@ function makeLocalizedUi(
   };
 }
 
-export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
+const RAW_UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
   en: EN_UI,
   es: ES_UI,
   fr: makeLocalizedUi({
@@ -1170,6 +1171,24 @@ export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = {
     adLabel: 'スポンサー枠',
   }),
 };
+
+export const UI_TRANSLATIONS: Record<LangCode, UiStrings> = (
+  Object.keys(RAW_UI_TRANSLATIONS) as LangCode[]
+).reduce((acc, code) => {
+  const base = RAW_UI_TRANSLATIONS[code];
+  acc[code] = {
+    ...base,
+    gear: {
+      ...base.gear,
+      disclosure: getAmazonAffiliateDisclosure(code),
+      items: base.gear.items.map((item) => ({
+        ...item,
+        url: buildAmazonEsAffiliateUrl(item.url),
+      })),
+    },
+  };
+  return acc;
+}, {} as Record<LangCode, UiStrings>);
 
 export const BADGE_DEFINITIONS: BadgeDefinition[] = [
   {
